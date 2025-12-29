@@ -1,6 +1,6 @@
 # My Apple Reminder V1
 
-A productivity-focused task management tool that takes the elegant UI/UX of MacOS Reminders and evolves it into a powerful, multi-list Kanban-style interface.
+A productivity-focused task management tool that takes the elegant UI/UX of MacOS Reminders. Evolving it into a powerful, multi-list Kanban-style interface.
 
 ## Key Enhancements
 
@@ -9,9 +9,9 @@ A productivity-focused task management tool that takes the elegant UI/UX of MacO
 3. Dedicated Delete Zone
 4. Easy to Export as Plain Text
 
-## Tech Stack
+## Techs and Libraries
 
-- Framework: Vite + React + TypeScript
-- Styling: Tailwind CSS, Shadcn
-- State Management: Zustand
-- Storage: Browser localStorage (No login required, your data stays on your device)
+- Vite + React + TypeScript
+- Tailwind CSS, shadcn
+- Zustand
+- Browser localStorage
