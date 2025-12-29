@@ -1,7 +1,17 @@
 # My Apple Reminder V1
 
-apple reminder has a very good ui/ux design which could even make it into a Kanban, so I made some adjustment base on the MacOS reminder, including:
+A productivity-focused task management tool that takes the elegant UI/UX of MacOS Reminders and evolves it into a powerful, multi-list Kanban-style interface.
 
-1. Show multiple lists in the same view.
-2. More flexible drag&drop function and delete area
-3. Easy to export / copy as plain text
+## Key Enhancements
+
+1. Multi-list Kanban View.
+2. Advanced Drag & Drop
+3. Dedicated Delete Zone
+4. Easy to Export as Plain Text
+
+## Tech Stack
+
+- Framework: Vite + React + TypeScript
+- Styling: Tailwind CSS, Shadcn
+- State Management: Zustand
+- Storage: Browser localStorage (No login required, your data stays on your device)
