@@ -1,6 +1,6 @@
-# My Apple Reminder V1
+# My Kanban V1
 
-A productivity-focused task management tool that takes the elegant UI/UX of MacOS Reminders. Evolving it into a powerful, multi-list Kanban-style interface. You can find it at: 
+A productivity-focused task management tool that takes the elegant UI/UX of MacOS Reminders. Evolving it into a powerful, multi-list Kanban interface. You can find it at: 
 <https://mykanbanbrian.netlify.app/>
 
 ## Key Enhancements
