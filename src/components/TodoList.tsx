@@ -22,7 +22,7 @@ export default function TodoList({ list }: { list: TodoList }) {
 
   const { isOver, setNodeRef } = useDroppable({ id: listId });
   const style =
-    "flex flex-col items-start justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 gap-2";
+    "flex flex-col items-start justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 gap-2 max-h-190";
   const overStyle =
     "flex flex-col items-start justify-start border border-green-400 bg-white shadow rounded-xl p-4 gap-2";
 
@@ -39,12 +39,13 @@ export default function TodoList({ list }: { list: TodoList }) {
           <RemoveListButton listId={listId} />
         </div>
       </div>
+      <div className="overflow-scroll w-full gap-2 flex flex-col">
+        {sortedListItems.map((item) => (
+          <TodoItem key={item.id} todoItem={item} />
+        ))}
 
-      {sortedListItems.map((item) => (
-        <TodoItem key={item.id} todoItem={item} />
-      ))}
-
-      <AddItem listId={listId} />
+        <AddItem listId={listId} />
+      </div>
     </div>
   );
 }
