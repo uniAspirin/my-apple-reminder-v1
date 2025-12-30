@@ -3,11 +3,7 @@ import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useDraggable } from "@dnd-kit/core";
 
-interface TodoItemProps {
-  todoItem: TodoItem;
-}
-
-export default function TodoItem({ todoItem }: TodoItemProps) {
+export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);

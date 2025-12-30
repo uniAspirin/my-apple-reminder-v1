@@ -7,11 +7,7 @@ import { useDroppable } from "@dnd-kit/core";
 import CopyListButton from "./CopyListButton";
 import { useMemo } from "react";
 
-interface TodoListProps {
-  list: TodoList;
-}
-
-export default function TodoList({ list }: TodoListProps) {
+export default function TodoList({ list }: { list: TodoList }) {
   const { listName, id: listId } = list;
   const items = useTodoStore((state) => state.items);
   const sortedListItems = useMemo(() => {

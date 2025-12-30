@@ -11,11 +11,7 @@ import {
 import { Trash } from "lucide-react";
 import { useTodoStore } from "../hooks/useTodoStore";
 
-interface RemoveListButtonProps {
-  listId: string;
-}
-
-export default function RemoveListButton({ listId }: RemoveListButtonProps) {
+export default function RemoveListButton({ listId }: { listId: string }) {
   const removeList = useTodoStore((state) => state.removeList);
 
   return (

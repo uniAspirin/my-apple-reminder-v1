@@ -2,11 +2,7 @@ import { Circle } from "lucide-react";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useState } from "react";
 
-interface AddItemProps {
-  listId: string;
-}
-
-export default function AddItem({ listId }: AddItemProps) {
+export default function AddItem({ listId }: {listId: string}) {
   const [content, setContent] = useState("");
   const addItem = useTodoStore((state) => state.addItem);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
