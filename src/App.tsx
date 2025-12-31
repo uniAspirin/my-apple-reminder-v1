@@ -57,7 +57,7 @@ function App() {
       <div className="h-screen flex flex-col">
         <Header />
         <div className="grow bg-neutral-100 overflow-scroll">
-          <main className="h-full flex flex-col px-1 py-3 gap-4 md:flex-row md:p-6 mx-auto">
+          <main className="h-full flex flex-col px-1.5 py-3 gap-4 md:flex-row md:p-6 mx-auto">
             {lists.map((list) => (
               <TodoList key={list.id} list={list} />
             ))}
