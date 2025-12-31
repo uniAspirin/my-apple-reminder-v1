@@ -1,9 +1,11 @@
 import {
   DndContext,
+  DragOverlay,
   PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
@@ -11,15 +13,24 @@ import { useTodoStore } from "./hooks/useTodoStore";
 import DeleteArea from "./components/DeleteArea";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import TodoItem from "./components/TodoItem";
 
 function App() {
+  const items = useTodoStore((state) => state.items);
   const lists = useTodoStore((state) => state.lists);
   const moveItem = useTodoStore((state) => state.moveItem);
   const removeItem = useTodoStore((state) => state.removeItem);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [activeId, setActiveId] = useState<string | number>("");
+
+  function handleDragStart(e: DragStartEvent) {
+    setIsDragging(true);
+    setActiveId(e.active.id);
+  }
   function handleDragEnd(e: DragEndEvent) {
     setIsDragging(false);
+    setActiveId("");
     const { active, over } = e;
     if (!over) return;
     if (over.id === "delete") {
@@ -39,7 +50,7 @@ function App() {
 
   return (
     <DndContext
-      onDragStart={() => setIsDragging(true)}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
@@ -55,6 +66,13 @@ function App() {
           </main>
         </div>
       </div>
+      <DragOverlay>
+        {activeId ? (
+          <TodoItem
+            todoItem={items.filter((item) => item.id === activeId)[0]}
+          />
+        ) : null}
+      </DragOverlay>
       <Toaster />
     </DndContext>
   );
