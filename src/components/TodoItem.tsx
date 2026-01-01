@@ -1,13 +1,16 @@
-import { Circle } from "lucide-react";
+import { Check, Circle } from "lucide-react";
 import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId, position } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);
+  const items = useTodoStore((state) => state.items);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, data: { role: "item", listId, position } });
@@ -27,7 +30,9 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
     >
       <button onClick={() => toggleIsFinished(id)}>
         {isFinished ? (
-          <Circle className="text-neutral-300" fill="#d4d4d4" />
+          <div className="size-6 rounded-full overflow-clip bg-neutral-300 flex items-center justify-center">
+            <Check size={13} strokeWidth={5} className="text-neutral-50" />
+          </div>
         ) : (
           <Circle className="text-neutral-300" />
         )}

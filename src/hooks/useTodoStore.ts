@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import type { TodoState } from "../types/todo";
+import type { TodoItem, TodoState } from "../types/todo";
 import { persist, createJSONStorage } from "zustand/middleware";
+import toast from "react-hot-toast";
 
 export const useTodoStore = create<TodoState>()(
   persist(
@@ -110,6 +111,7 @@ export const useTodoStore = create<TodoState>()(
       toggleIsFinished(itemId) {
         set((state) => {
           const currentItem = state.items.find((item) => item.id === itemId);
+          // 1) true => false
           if (currentItem?.isFinished === true) {
             return {
               items: state.items.map((item) =>
@@ -122,21 +124,30 @@ export const useTodoStore = create<TodoState>()(
               ),
             };
           }
+          // 2) false => true, move it to the top: set position to the smallest
           const sortedItems = state.items
             .filter((item) => item.listId === currentItem?.listId)
             .sort((a, b) => a.position - b.position);
           const newPosition = sortedItems[0].position / 2;
-          return {
-            items: state.items.map((item) =>
-              item.id === itemId
-                ? {
-                    ...item,
-                    isFinished: !item.isFinished,
-                    position: newPosition,
-                  }
-                : item
-            ),
-          };
+          const newItems = state.items.map((item) =>
+            item.id === itemId
+              ? {
+                  ...item,
+                  isFinished: !item.isFinished,
+                  position: newPosition,
+                }
+              : item
+          );
+          // show toast if all todos in list are finished
+          const allFinished = sortedItems
+            .filter((item) => item.id !== itemId)
+            .every((item) => item.isFinished);
+          if (allFinished) {
+            toast("Good Job!!!!!!", {
+              icon: "👏",
+            });
+          }
+          return { items: newItems };
         });
       },
       removeItem(itemId) {

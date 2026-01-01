@@ -5,7 +5,6 @@ import AddItem from "./AddItem";
 import RemoveListButton from "./RemoveListButton";
 import { useDroppable } from "@dnd-kit/core";
 import CopyListButton from "./CopyListButton";
-import { useMemo } from "react";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -42,7 +41,7 @@ export default function TodoList({ list }: { list: TodoList }) {
           onChange={(e) => editListName({ name: e.target.value, listId })}
         />
         <div className="flex gap-4">
-          <CopyListButton listName={listName} listItems={sortedListItems} />
+          <CopyListButton listItems={sortedListItems} />
           <RemoveListButton listId={listId} />
         </div>
       </div>

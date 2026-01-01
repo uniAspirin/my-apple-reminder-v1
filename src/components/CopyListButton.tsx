@@ -3,17 +3,13 @@ import type { TodoItem } from "../types/todo";
 import toast from "react-hot-toast";
 
 interface CopyListButtonProps {
-  listName: string;
   listItems: TodoItem[];
 }
 
-export default function CopyListButton({
-  listName,
-  listItems,
-}: CopyListButtonProps) {
+export default function CopyListButton({ listItems }: CopyListButtonProps) {
   function getFormatContent() {
     const body = listItems.map((item) => item.content).join("\n");
-    return listName + "\n" + body;
+    return body;
   }
 
   async function handleCopy() {
@@ -31,7 +27,7 @@ export default function CopyListButton({
       onClick={handleCopy}
       title="Copy as plain text"
     >
-      <Copy size={20} />
+      <Copy size={20} className="text-neutral-500" />
     </button>
   );
 }

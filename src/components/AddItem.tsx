@@ -7,7 +7,14 @@ export default function AddItem({ listId }: { listId: string }) {
   const addItem = useTodoStore((state) => state.addItem);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && content) {
-      addItem({ content, listId });
+      content
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line !== "")
+        .forEach((line) => {
+          addItem({ content: line, listId });
+        });
+
       setContent("");
     }
   };
