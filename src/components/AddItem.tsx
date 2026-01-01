@@ -18,11 +18,12 @@ export default function AddItem({ listId }: { listId: string }) {
         });
 
       setContent("");
+      e.currentTarget.style.height = "29px";
     }
   };
   return (
-    <div className="flex items-center gap-2 w-full">
-      <button>
+    <div className="flex items-start gap-2 w-full">
+      <button className="mt-0.5">
         <Circle className="text-neutral-300" />
       </button>
       {/* <input
@@ -33,11 +34,18 @@ export default function AddItem({ listId }: { listId: string }) {
         onChange={(e) => setContent(e.target.value)}
       /> */}
       <textarea
-        className="w-full bg-transparent border-b border-dashed border-neutral-300 text-neutral-800 outline-none px-1 py-0.5 resize-none overflow-hidden placeholder:text-neutral-300 h-7.25"
+        className="w-full bg-transparent border-b border-dashed border-neutral-300 text-neutral-800 outline-none px-1 py-0.5 resize-none overflow-hidden placeholder:text-neutral-300 h-[29px] min-h-[29px] leading-[20px]"
         placeholder="new todo"
         onKeyDown={handleKeyDown}
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        onInput={(e) => {
+          const target = e.target as HTMLTextAreaElement;
+          target.style.height = "29px"; // 1. 重置回初始高度
+          // 2. 取 scrollHeight 和 29px 之间的最大值
+          const newHeight = Math.max(target.scrollHeight, 29);
+          target.style.height = `${newHeight}px`;
+        }}
       />
     </div>
   );

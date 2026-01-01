@@ -3,11 +3,26 @@ import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useEffect, useRef } from "react";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId, position } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const adjustHeight = () => {
+    const target = textareaRef.current;
+    if (target) {
+      target.style.height = "29px";
+      const newHeight = Math.max(target.scrollHeight, 29);
+      target.style.height = `${newHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustHeight();
+  }, [content]);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, data: { role: "item", listId, position } });
@@ -19,13 +34,13 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
 
   return (
     <div
-      className="flex items-center gap-2 w-full"
+      className="flex items-start gap-2 w-full"
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
-      <button onClick={() => toggleIsFinished(id)}>
+      <button onClick={() => toggleIsFinished(id)} className="mt-0.5">
         {isFinished ? (
           <div className="size-6 rounded-full overflow-clip bg-neutral-300 flex items-center justify-center">
             <Check size={13} strokeWidth={5} className="text-neutral-50" />
@@ -34,14 +49,15 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
           <Circle className="text-neutral-300" />
         )}
       </button>
-      <input
-        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 ${
-          isFinished ? "text-neutral-600" : ""
-        }`}
+      <textarea
+        ref={textareaRef}
         value={content}
         onChange={(e) =>
-          editItemContent({ content: e.target.value, itemId: id })
+          editItemContent({ content: e.target.value.trim(), itemId: id })
         }
+        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 resize-none ${
+          isFinished ? "text-neutral-600" : ""
+        }`}
       />
     </div>
   );
