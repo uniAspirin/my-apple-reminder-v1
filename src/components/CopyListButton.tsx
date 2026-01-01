@@ -1,4 +1,4 @@
-import { Copy, Share } from "lucide-react";
+import { Share } from "lucide-react";
 import type { TodoItem } from "../types/todo";
 import toast from "react-hot-toast";
 
