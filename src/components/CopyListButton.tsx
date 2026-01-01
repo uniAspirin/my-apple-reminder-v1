@@ -1,4 +1,4 @@
-import { Copy } from "lucide-react";
+import { Copy, Share } from "lucide-react";
 import type { TodoItem } from "../types/todo";
 import toast from "react-hot-toast";
 
@@ -27,7 +27,7 @@ export default function CopyListButton({ listItems }: CopyListButtonProps) {
       onClick={handleCopy}
       title="Copy as plain text"
     >
-      <Copy size={20} className="text-neutral-500" />
+      <Share size={20} className="text-neutral-500" />
     </button>
   );
 }
