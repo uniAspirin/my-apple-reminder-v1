@@ -38,7 +38,7 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
         )}
       </button>
       <input
-        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 truncate ${
+        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 ${
           isFinished ? "text-neutral-600" : ""
         }`}
         value={content}

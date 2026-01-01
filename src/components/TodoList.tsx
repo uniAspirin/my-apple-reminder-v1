@@ -29,7 +29,7 @@ export default function TodoList({ list }: { list: TodoList }) {
     "flex flex-col items-start justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 gap-2 max-h-190";
   const overStyle =
     "flex flex-col items-start justify-start border border-green-400 bg-white shadow rounded-xl p-4 gap-2";
-
+  console.log(list);
   console.log(sortedListItems);
 
   return (
