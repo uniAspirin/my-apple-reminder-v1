@@ -1,5 +1,4 @@
 import {
-  closestCenter,
   DndContext,
   DragOverlay,
   PointerSensor,
@@ -53,7 +52,11 @@ function App() {
     }
     // 3. handle item order change
     const targetListId = overData?.listId;
-    changeItemOrder({ activeId: active.id, overId: over.id, targetListId });
+    changeItemOrder({
+      activeId: active.id as string,
+      overId: over.id as string,
+      targetListId,
+    });
   }
   const sensors = useSensors(
     useSensor(PointerSensor, {

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { TodoItem, TodoState } from "../types/todo";
+import type { TodoState } from "../types/todo";
 import { persist, createJSONStorage } from "zustand/middleware";
 import toast from "react-hot-toast";
 

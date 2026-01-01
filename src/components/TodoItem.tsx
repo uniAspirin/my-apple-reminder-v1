@@ -3,14 +3,11 @@ import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId, position } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);
-  const items = useTodoStore((state) => state.items);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, data: { role: "item", listId, position } });
