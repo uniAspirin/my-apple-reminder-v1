@@ -55,7 +55,7 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
         onChange={(e) =>
           editItemContent({ content: e.target.value.trim(), itemId: id })
         }
-        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 resize-none ${
+        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 resize-none overflow-hidden ${
           isFinished ? "text-neutral-600" : ""
         }`}
       />
