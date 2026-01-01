@@ -2,7 +2,10 @@ import { useDroppable } from "@dnd-kit/core";
 import { Trash } from "lucide-react";
 
 export default function DeleteArea() {
-  const { setNodeRef, isOver } = useDroppable({ id: "delete" });
+  const { setNodeRef, isOver } = useDroppable({
+    id: "delete",
+    data: { role: "delete" },
+  });
   return (
     <div
       ref={setNodeRef}

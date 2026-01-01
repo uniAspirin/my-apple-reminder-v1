@@ -5,13 +5,17 @@ import { persist, createJSONStorage } from "zustand/middleware";
 export const useTodoStore = create<TodoState>()(
   persist(
     (set) => ({
-      lists: [{ id: "all", listName: "All" }],
+      lists: [{ id: "all", listName: "All", position: 0 }],
       items: [],
       addList(name) {
         set((state) => ({
           lists: [
             ...state.lists,
-            { id: Date.now().toString(), listName: name },
+            {
+              id: Date.now().toString(),
+              listName: name,
+              position: Date.now(),
+            },
           ],
         }));
       },
@@ -36,6 +40,7 @@ export const useTodoStore = create<TodoState>()(
             ...state.items,
             {
               id: Math.random().toString(36).substring(2, 9),
+              position: Date.now(),
               content,
               listId,
               isFinished: false,
@@ -50,21 +55,89 @@ export const useTodoStore = create<TodoState>()(
           ),
         }));
       },
-      moveItem({ itemId, newListId }) {
-        set((state) => ({
-          items: state.items.map((item) =>
-            item.id === itemId ? { ...item, listId: newListId } : item
-          ),
-        }));
+      changeItemOrder({ activeId, overId, targetListId }) {
+        set((state) => {
+          const sortedItems = state.items
+            .filter((i) => i.listId === targetListId)
+            .sort((a, b) => a.position - b.position);
+
+          let calculatedPosition: number;
+
+          // 1) over is a list
+          if (overId === targetListId) {
+            calculatedPosition = Date.now();
+          }
+          // 2) over is an item
+          else {
+            const activeIndex = sortedItems.findIndex((i) => i.id === activeId);
+            const overIndex = sortedItems.findIndex((i) => i.id === overId);
+
+            if (overIndex === 0) {
+              // insert in the head
+              calculatedPosition = sortedItems[0].position / 2;
+            } else if (overIndex === sortedItems.length - 1) {
+              // insert in the end
+              calculatedPosition = Date.now();
+            } else {
+              // insert in the middle
+              // move downwards
+              if (activeIndex < overIndex) {
+                const curPosition = sortedItems[overIndex].position;
+                const nextPosition = sortedItems[overIndex + 1].position;
+                calculatedPosition = (curPosition + nextPosition) / 2;
+              } else {
+                // move upwards
+                const curPosition = sortedItems[overIndex].position;
+                const nextPosition = sortedItems[overIndex - 1].position;
+                calculatedPosition = (curPosition + nextPosition) / 2;
+              }
+            }
+          }
+
+          return {
+            items: state.items.map((item) =>
+              item.id === activeId
+                ? {
+                    ...item,
+                    listId: targetListId,
+                    position: calculatedPosition,
+                  }
+                : item
+            ),
+          };
+        });
       },
       toggleIsFinished(itemId) {
-        set((state) => ({
-          items: state.items.map((item) =>
-            item.id === itemId
-              ? { ...item, isFinished: !item.isFinished }
-              : item
-          ),
-        }));
+        set((state) => {
+          const currentItem = state.items.find((item) => item.id === itemId);
+          if (currentItem?.isFinished === true) {
+            return {
+              items: state.items.map((item) =>
+                item.id === itemId
+                  ? {
+                      ...item,
+                      isFinished: !item.isFinished,
+                    }
+                  : item
+              ),
+            };
+          }
+          const sortedItems = state.items
+            .filter((item) => item.listId === currentItem?.listId)
+            .sort((a, b) => a.position - b.position);
+          const newPosition = sortedItems[0].position / 2;
+          return {
+            items: state.items.map((item) =>
+              item.id === itemId
+                ? {
+                    ...item,
+                    isFinished: !item.isFinished,
+                    position: newPosition,
+                  }
+                : item
+            ),
+          };
+        });
       },
       removeItem(itemId) {
         set((state) => ({

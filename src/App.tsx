@@ -1,7 +1,9 @@
 import {
+  closestCenter,
   DndContext,
   DragOverlay,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -18,8 +20,8 @@ import TodoItem from "./components/TodoItem";
 function App() {
   const items = useTodoStore((state) => state.items);
   const lists = useTodoStore((state) => state.lists);
-  const moveItem = useTodoStore((state) => state.moveItem);
   const removeItem = useTodoStore((state) => state.removeItem);
+  const changeItemOrder = useTodoStore((state) => state.changeItemOrder);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<string | number>("");
@@ -29,20 +31,40 @@ function App() {
     setActiveId(e.active.id);
   }
   function handleDragEnd(e: DragEndEvent) {
+    // update OverLay
     setIsDragging(false);
     setActiveId("");
+
+    // base on role
     const { active, over } = e;
+    // 1. same place, return
     if (!over) return;
+    // 2. delete area, delete it
     if (over.id === "delete") {
       removeItem(active.id as string);
     }
-    if (active.data.current?.listId !== active.id)
-      if (over.id !== active.id)
-        moveItem({ itemId: active.id as string, newListId: over.id as string });
+    const overData = over?.data.current;
+    // disable: drag over an item in another list
+    if (
+      active.data.current?.listId !== over.data.current?.listId &&
+      over.data.current?.role === "item"
+    ) {
+      return;
+    }
+    // 3. handle item order change
+    const targetListId = overData?.listId;
+    changeItemOrder({ activeId: active.id, overId: over.id, targetListId });
   }
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 5 },
+    }),
+    useSensor(TouchSensor, {
+      // Press delay of 250ms, with tolerance of 5px of movement
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
     })
   );
 
@@ -50,9 +72,10 @@ function App() {
 
   return (
     <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      sensors={sensors}
     >
       <div className="h-screen flex flex-col">
         <Header />

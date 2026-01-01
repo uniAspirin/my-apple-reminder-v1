@@ -1,30 +1,29 @@
 import { Circle } from "lucide-react";
 import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
-import { useDraggable } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
-  const { id, content, isFinished, listId } = todoItem;
+  const { id, content, isFinished, listId, position } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id,
-    data: { listId },
-  });
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id, data: { role: "item", listId, position } });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   return (
     <div
       className="flex items-center gap-2 w-full"
-      style={style}
       ref={setNodeRef}
-      {...listeners}
+      style={style}
       {...attributes}
+      {...listeners}
     >
       <button onClick={() => toggleIsFinished(id)}>
         {isFinished ? (
@@ -34,7 +33,9 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
         )}
       </button>
       <input
-        className="border-b w-full border-neutral-300 text-neutral-800 outline-none px-1 py-0.5 truncate"
+        className={`border-b w-full border-neutral-300 outline-none px-1 py-0.5 truncate ${
+          isFinished ? "text-neutral-600" : ""
+        }`}
         value={content}
         onChange={(e) =>
           editItemContent({ content: e.target.value, itemId: id })

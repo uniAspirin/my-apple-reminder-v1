@@ -1,5 +1,6 @@
 interface TodoItem {
   id: string;
+  position: number;
   content: string;
   listId: string;
   isFinished: boolean;
@@ -7,6 +8,7 @@ interface TodoItem {
 
 interface TodoList {
   id: string;
+  position: number;
   listName: string;
 }
 
@@ -21,7 +23,11 @@ interface TodoState {
   addItem: (params: { content: string; listId: string }) => void;
   editItemContent: (params: { content: string; itemId: string }) => void;
   toggleIsFinished: (itemId: string) => void;
-  moveItem: (params: { itemId: string; newListId: string }) => void;
+  changeItemOrder: (params: {
+    activeId: string;
+    overId: string;
+    targetListId: string;
+  }) => void;
   removeItem: (itemId: string) => void;
 }
 
