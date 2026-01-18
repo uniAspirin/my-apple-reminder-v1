@@ -2,7 +2,7 @@ import { useTodoStore } from "../hooks/useTodoStore";
 import TodoItem from "./TodoItem";
 import { type TodoList } from "../types/todo";
 import AddItem from "./AddItem";
-import RemoveListButton from "./RemoveListButton";
+// import RemoveListButton from "./RemoveListButton";
 import CopyListButton from "./CopyListButton";
 import {
   SortableContext,
@@ -35,9 +35,9 @@ export default function TodoList({ list }: { list: TodoList }) {
   };
 
   const style =
-    "flex flex-col items-center justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 pt-1 max-h-100 h-auto";
+    "flex flex-col items-center justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none";
   const overStyle =
-    "flex flex-col items-center justify-start border border-green-400 bg-white shadow rounded-xl p-4 pt-1 max-h-190";
+    "flex flex-col items-center justify-start border border-green-400 bg-white shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none";
 
   return (
     <div
@@ -55,7 +55,7 @@ export default function TodoList({ list }: { list: TodoList }) {
         />
         <div className="flex gap-4">
           <CopyListButton listItems={sortedListItems} />
-          <RemoveListButton listId={listId} />
+          {/* <RemoveListButton listId={listId} /> */}
         </div>
       </div>
       <SortableContext

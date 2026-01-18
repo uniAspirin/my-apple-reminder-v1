@@ -15,15 +15,13 @@ import DeleteArea from "./components/DeleteArea";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import TodoItem from "./components/TodoItem";
-import {
-  horizontalListSortingStrategy,
-  SortableContext,
-} from "@dnd-kit/sortable";
+import { rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 
 function App() {
   const items = useTodoStore((state) => state.items);
   const lists = useTodoStore((state) => state.lists);
   const removeItem = useTodoStore((state) => state.removeItem);
+  const removeList = useTodoStore((state) => state.removeList);
   const changeItemOrder = useTodoStore((state) => state.changeItemOrder);
   const changeListOrder = useTodoStore((state) => state.changeListOrder);
 
@@ -49,7 +47,11 @@ function App() {
     if (!over) return;
     // 2. delete area, delete it
     if (over.id === "delete") {
-      removeItem(active.id as string);
+      if (active.data.current?.role === "item") {
+        removeItem(active.id as string);
+      } else if (active.data.current?.role === "list") {
+        removeList(active.id as string);
+      }
     }
     const overData = over?.data.current;
     // disable: drag over an item in another list
@@ -116,11 +118,18 @@ function App() {
       <div className="h-screen flex flex-col">
         <Header />
         <div className="grow bg-neutral-100 overflow-scroll">
-          <main className="h-full flex flex-col items-start px-1.5 py-3 gap-4 md:flex-row md:p-6 mx-auto">
-            <SortableContext
-              items={lists}
-              strategy={horizontalListSortingStrategy}
-            >
+          <main
+            className="h-full flex flex-col items-center px-1.5 py-3 gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:p-6 mx-auto"
+            style={{
+              // 2. 关键：强制分为两行，每行平分高度 (或者根据需求设置具体高度)
+              gridAutoRows: "350px",
+              // 3. 关键：内容溢出时，自动向右（列）增加，而不是向下
+              gridAutoFlow: "row",
+              // 4. 关键：确保每一列的宽度固定，不会被压缩
+              gridAutoColumns: "350px",
+            }}
+          >
+            <SortableContext items={lists} strategy={rectSortingStrategy}>
               {lists
                 .sort((a, b) => a.position - b.position)
                 .map((list) => (

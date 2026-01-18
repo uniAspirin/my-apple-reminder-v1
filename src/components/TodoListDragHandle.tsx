@@ -11,7 +11,7 @@ export default function TodoListDragHandle({
       className="text-lg hover:bg-neutral-100 rounded-sm p-0.5 cursor-pointer transition-all duration-200 w-10 hover:cursor-move"
       {...listeners}
     >
-      <GripHorizontal className="mx-auto" />
+      <GripHorizontal className="mx-auto text-neutral-500" />
     </button>
   );
 }
