@@ -72,6 +72,7 @@ export const useTodoStore = create<TodoState>()(
           isFinished: false,
         },
       ],
+
       addList(name) {
         set((state) => ({
           lists: [
@@ -84,21 +85,24 @@ export const useTodoStore = create<TodoState>()(
           ],
         }));
       },
+
       editListName({ name, listId }) {
         {
           set((state) => ({
             lists: state.lists.map((list) =>
-              list.id === listId ? { ...list, listName: name } : list
+              list.id === listId ? { ...list, listName: name } : list,
             ),
           }));
         }
       },
+
       removeList(listId) {
         set((state) => ({
           lists: state.lists.filter((list) => list.id !== listId),
           items: state.items.filter((item) => item.listId !== listId),
         }));
       },
+
       addItem({ content, listId }) {
         set((state) => ({
           items: [
@@ -113,13 +117,15 @@ export const useTodoStore = create<TodoState>()(
           ],
         }));
       },
+
       editItemContent({ content, itemId }) {
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === itemId ? { ...item, content } : item
+            item.id === itemId ? { ...item, content } : item,
           ),
         }));
       },
+
       changeItemOrder({ activeId, overId, targetListId }) {
         set((state) => {
           const sortedItems = state.items
@@ -167,11 +173,12 @@ export const useTodoStore = create<TodoState>()(
                     listId: targetListId,
                     position: calculatedPosition,
                   }
-                : item
+                : item,
             ),
           };
         });
       },
+
       toggleIsFinished(itemId) {
         set((state) => {
           const currentItem = state.items.find((item) => item.id === itemId);
@@ -184,7 +191,7 @@ export const useTodoStore = create<TodoState>()(
                       ...item,
                       isFinished: !item.isFinished,
                     }
-                  : item
+                  : item,
               ),
             };
           }
@@ -200,7 +207,7 @@ export const useTodoStore = create<TodoState>()(
                   isFinished: !item.isFinished,
                   position: newPosition,
                 }
-              : item
+              : item,
           );
           // show toast if all todos in list are finished
           const allFinished = sortedItems
@@ -214,12 +221,59 @@ export const useTodoStore = create<TodoState>()(
           return { items: newItems };
         });
       },
+
       removeItem(itemId) {
         set((state) => ({
           items: state.items.filter((item) => item.id !== itemId),
         }));
       },
+
+      changeListOrder({ activeId, overId }) {
+        set((state) => {
+          const sortedItems = state.lists.sort(
+            (a, b) => a.position - b.position,
+          );
+
+          let calculatedPosition: number;
+
+          const activeIndex = sortedItems.findIndex((i) => i.id === activeId);
+          const overIndex = sortedItems.findIndex((i) => i.id === overId);
+
+          // insert in the head
+          if (overIndex === 0) {
+            calculatedPosition = sortedItems[0].position / 2;
+            // insert in the end
+          } else if (overIndex === sortedItems.length - 1) {
+            calculatedPosition = Date.now();
+            // insert in the middle
+          } else {
+            // move downwards
+            if (activeIndex < overIndex) {
+              const curPosition = sortedItems[overIndex].position;
+              const nextPosition = sortedItems[overIndex + 1].position;
+              calculatedPosition = (curPosition + nextPosition) / 2;
+            } else {
+              // move upwards
+              const curPosition = sortedItems[overIndex].position;
+              const nextPosition = sortedItems[overIndex - 1].position;
+              calculatedPosition = (curPosition + nextPosition) / 2;
+            }
+          }
+
+          return {
+            lists: state.lists.map((list) =>
+              list.id === activeId
+                ? {
+                    ...list,
+                    position: calculatedPosition,
+                  }
+                : list,
+            ),
+          };
+        });
+      },
     }),
-    { name: "todo-storage", storage: createJSONStorage(() => localStorage) }
-  )
+
+    { name: "todo-storage", storage: createJSONStorage(() => localStorage) },
+  ),
 );

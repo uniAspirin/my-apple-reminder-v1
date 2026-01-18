@@ -38,9 +38,12 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
     >
-      <button onClick={() => toggleIsFinished(id)} className="mt-0.5">
+      <button
+        onClick={() => toggleIsFinished(id)}
+        className="mt-0.5"
+        {...listeners}
+      >
         {isFinished ? (
           <div className="size-6 rounded-full overflow-clip bg-neutral-300 flex items-center justify-center">
             <Check size={13} strokeWidth={5} className="text-neutral-50" />

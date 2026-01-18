@@ -28,6 +28,7 @@ interface TodoState {
     overId: string;
     targetListId: string;
   }) => void;
+  changeListOrder: (params: { activeId: string; overId: string }) => void;
   removeItem: (itemId: string) => void;
 }
 

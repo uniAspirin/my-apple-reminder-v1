@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { useTodoStore } from "../hooks/useTodoStore";
 
-export default function RemoveListButton() {
+export default function AddListButton() {
   const addList = useTodoStore((state) => state.addList);
   return (
     <button
