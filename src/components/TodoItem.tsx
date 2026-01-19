@@ -4,6 +4,7 @@ import { useTodoStore } from "../hooks/useTodoStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useRef } from "react";
+import TodoItemDragHandle from "./TodoItemDragHandle";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId, position } = todoItem;
@@ -34,16 +35,12 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
 
   return (
     <div
-      className="flex items-start gap-2 w-full"
+      className="flex items-start w-full"
       ref={setNodeRef}
       style={style}
       {...attributes}
     >
-      <button
-        onClick={() => toggleIsFinished(id)}
-        className="mt-0.5"
-        {...listeners}
-      >
+      <button onClick={() => toggleIsFinished(id)} className="mt-0.5 mr-2">
         {isFinished ? (
           <div className="size-6 rounded-full overflow-clip bg-neutral-300 flex items-center justify-center">
             <Check size={13} strokeWidth={5} className="text-neutral-50" />
@@ -62,6 +59,7 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
           isFinished ? "text-neutral-600" : ""
         }`}
       />
+      <TodoItemDragHandle listeners={listeners} />
     </div>
   );
 }

@@ -35,9 +35,9 @@ export default function TodoList({ list }: { list: TodoList }) {
   };
 
   const style =
-    "flex flex-col items-center justify-start border border-neutral-200 bg-white shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none transition-all duration-200";
+    "flex flex-col items-center justify-start border bg-neutral-200 bg-white shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none";
   const overStyle =
-    "flex flex-col items-center justify-start border bg-neutral-100 shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none transition-all duration-200";
+    "flex flex-col items-center justify-start border  bg-neutral-200 bg-white shadow rounded-xl p-4 pt-1 h-full w-full max-w-140 md:max-w-none";
 
   return (
     <div

@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/core";
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
+import TodoListOverlay from "./components/TodoListOverlay";
 import { useTodoStore } from "./hooks/useTodoStore";
 import DeleteArea from "./components/DeleteArea";
 import { useState } from "react";
@@ -83,7 +84,9 @@ function App() {
 
   function handleOverlay() {
     if (activeRole === "list") {
-      return <TodoList list={lists.find((list) => list.id === activeId)!} />;
+      return (
+        <TodoListOverlay list={lists.find((list) => list.id === activeId)!} />
+      );
     } else if (activeRole === "item") {
       return (
         <TodoItem todoItem={items.filter((item) => item.id === activeId)[0]} />
