@@ -1,4 +1,5 @@
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import { EllipsisVertical } from "lucide-react";
 
 export default function TodoItemDragHandle({
   listeners,
@@ -7,8 +8,10 @@ export default function TodoItemDragHandle({
 }) {
   return (
     <button
-      className="text-lg hover:bg-neutral-100 rounded-sm cursor-pointer transition-all duration-200 w-5 h-6 hover:cursor-move"
+      className="hover:bg-neutral-100 rounded-sm cursor-pointer transition-all duration-200 hover:cursor-move"
       {...listeners}
-    ></button>
+    >
+      <EllipsisVertical className="mx-auto text-neutral-200" />
+    </button>
   );
 }
