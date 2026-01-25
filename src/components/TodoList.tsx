@@ -11,6 +11,7 @@ import {
 } from "@dnd-kit/sortable";
 import TodoListDragHandle from "./TodoListDragHandle";
 import { CSS } from "@dnd-kit/utilities";
+import ProgressCircle from "./ProgressCircle";
 
 export default function TodoList({ list }: { list: TodoList }) {
   const { listName, id: listId, position } = list;
@@ -49,15 +50,17 @@ export default function TodoList({ list }: { list: TodoList }) {
       <TodoListDragHandle listeners={listeners} />
       <div className="flex items-center justify-between w-full mb-2">
         <input
-          className="font-semibold text-2xl outline-none min-w-40"
+          className="font-semibold text-2xl outline-none min-w-40 relative"
           value={listName}
           onChange={(e) => editListName({ name: e.target.value, listId })}
         />
         <div className="flex gap-4">
+          <ProgressCircle todoItems={sortedListItems} size={24} />
           <CopyListButton listItems={sortedListItems} />
           {/* <RemoveListButton listId={listId} /> */}
         </div>
       </div>
+
       <SortableContext
         items={sortedListItems}
         strategy={verticalListSortingStrategy}
