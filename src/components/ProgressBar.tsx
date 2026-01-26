@@ -9,11 +9,11 @@ export default function ProgressBar({ value, max }: ProgressBarProps) {
 
   return (
     <div className="flex gap-1 flex-wrap">
-      {Array.from({ length: pastDays }).map((num, index) => (
+      {Array.from({ length: pastDays }).map((_, index) => (
         <Block key={index} type="past" />
       ))}
       <Block type="current" />
-      {Array.from({ length: remainingDays }).map((num, index) => (
+      {Array.from({ length: remainingDays }).map((_, index) => (
         <Block key={index} type="" />
       ))}
     </div>
