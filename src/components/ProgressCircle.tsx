@@ -27,13 +27,11 @@ export default function ProgressCircle({
 
   // Tailwind color class by percentage
   const colorClass =
-    percentage >= 75
+    percentage >= 66
       ? "text-green-500"
-      : percentage >= 50
-        ? "text-blue-500"
-        : percentage >= 25
-          ? "text-yellow-500"
-          : "text-red-500";
+      : percentage >= 33
+        ? "text-yellow-500"
+        : "text-red-500";
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
