@@ -30,5 +30,5 @@ function Block({ type }: { type: string }) {
     color = "bg-neutral-200";
   }
 
-  return <div className={`${color} size-3 rounded-xs`}></div>;
+  return <div className={`${color} size-3 sm:size-4 rounded-xs`}></div>;
 }
