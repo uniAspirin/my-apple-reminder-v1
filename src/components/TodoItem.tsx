@@ -3,13 +3,15 @@ import type { TodoItem } from "../types/todo";
 import { useTodoStore } from "../hooks/useTodoStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import TodoItemDragHandle from "./TodoItemDragHandle";
 
 export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
   const { id, content, isFinished, listId, position } = todoItem;
   const toggleIsFinished = useTodoStore((state) => state.toggleIsFinished);
   const editItemContent = useTodoStore((state) => state.editItemContent);
+
+  const [localContent, setLocalContent] = useState(content);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const adjustHeight = () => {
@@ -21,8 +23,33 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
     }
   };
 
+  // adjust height
   useEffect(() => {
     adjustHeight();
+  }, [localContent]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      adjustHeight();
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // debounce
+  useEffect(() => {
+    if (localContent === content) return;
+    const timer = setTimeout(() => {
+      editItemContent({ content: localContent.trim(), itemId: id });
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [localContent, id, editItemContent, content]);
+
+  // when content updates, sync local content
+  useEffect(() => {
+    setLocalContent(content);
   }, [content]);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -51,10 +78,8 @@ export default function TodoItem({ todoItem }: { todoItem: TodoItem }) {
       </button>
       <textarea
         ref={textareaRef}
-        value={content}
-        onChange={(e) =>
-          editItemContent({ content: e.target.value.trim(), itemId: id })
-        }
+        value={localContent}
+        onChange={(e) => setLocalContent(e.target.value)}
         className={`grow border-b w-full border-neutral-300 outline-none px-1 py-0.5 resize-none overflow-hidden ${
           isFinished ? "text-neutral-600" : ""
         }`}
